@@ -1,3 +1,0 @@
---------------Demo file--------
-
-Sample text.
