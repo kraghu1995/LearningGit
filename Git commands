@@ -1,0 +1,206 @@
+git add .
+git status
+git commit -m "message"
+git log
+git ls-files- Used to see what are the files being tracked by git
+git commit -am "message"
+git push -u origin master --tags- Track the changes between commits in master of local repo and remote repo. --tags is for pushing tags from local to repo. -u should be used in first push.
+
+Backing Out changes before commit"
+
+git reset HEAD "filename"
+git checkout -- $filename
+
+Checking git hist in all folders of repo:
+
+git log --oneline --graph --decorate --all
+
+Creating alias git command for checking history:
+
+git config --global alias.hist "log --oneline --graph --decorate --all"
+
+Creating a new file which needs to be tracked by git, use "touch" command below, or else use normal vi bash command if it need not be tracked:
+
+touch "filename"
+
+Git Ignore:
+
+If you don't want any file to be displayed in repo, create a .gitignore file as below.
+
+1) touch .gitignore
+2) inside the file, just mention the particular log file name. For ignoring all log files, mention *.log and commit the changes.
+
+Git Diff:
+
+If you want to find any difference for the particular log id, enter
+
+git hist (this will work only after creating alias)
+git diff $commitid HEAD
+
+Example:
+Open the existing file and make some changes.
+now check using git status.
+to check the difference of the particular file enter "git diff"
+to check the difference using p4diff tool, give "git difftool"
+
+Branches:
+
+To list the branches, type:
+git branch
+
+To create a feature branch and to switch to that, give
+git checkout -b  FB_001
+
+1) Take any file and make some changes and commit
+2) type git hist and check whether the head (indicates latest commit in which branch) points to FB_001.
+3) To merge the changes from FB to master, please switch to master branch by "git checkout master".
+4) Type git hist and check whether the head (indicates latest commit in which branch) points to master.
+5) Now merge the changes by giving "git merge $FB and check the history.
+6) Once the changes are done & merged into master and FB is no longer required, you can delete those changes by git branch -d $FB
+
+Resolving conflicts:
+
+1) Create any FB(very-bad) and make some changes in any files imported from master and check git hist.
+2) Commit the changes.
+3) Switch to master and let's assume you are another developer who is going to commit something in master whithout knowing about other developer. 
+4) Open any existing file in master and make some changes. Then commit and try to merge (git merge very_bad).
+5) While merging, git doesn't know what was the latest version to be merged into master. So it will throw a conflict error.
+6) Hence open the git merge tool by typing "git mergetool". It will show you three versions, out of which you need to select the one that you are going to merge.
+7) Selecting the latest version will be done by colors (Each version will have a color and a shape). Save it and close. Then commit the changes.
+8) Check the status now. There will be .orig file in the commit stage which you need to include in .gitignore file to exclude it. Make sure this is done.
+9) Now, "git commit -am "Excluding the .orig file".
+10) List the files, If you see, .orig file, simply remove it by "rm" command.
+
+Tagging Special events or milestones:
+
+1) For example if you release a first build successfully and it is a special milestione, you can tag it along with the commit id.
+2) Enter "git tag --list" to display the existing tags which was created already.
+3) The tag which you are going to create will be added in the latest commit of the respective branch which you are currently working on.
+4) There are two types of tags: 1) Lightweight Tag 2) Annotated tag.
+
+Lightweight Tag:
+1) This tag includes only the name of tag and not anything else. Below is the command
+
+git tag mytag
+
+Annotated Tag:
+This will have additional information associated with it. Below is the command
+
+git tag -a v1.0 -m "Release version 1.0"
+
+a -> denotes annotation.
+v1.0-> tag name.
+-m -> commit message along with the tag name.
+
+To check the changes, type "git hist". Now you can only see the tag name but not commit message. So, type "git show $tagname" where you can see all the changes.
+
+Stashing:
+
+Stashing is used for saving the current changes before & commit later and switch to another changes if it needs to be done on priority.
+
+1) Open any existing file and make some changes.
+2) Suppose if you do not want to commit it now, please save the changes by "git stash". The changes will be saved now and if you want to check, please 
+enter "git stash list". Now you can see the no.of.stashes you have currently.
+3) Now open that another file which you want to work on and commit the changes by "git commit -am "message". 
+4) Once you are done with other changes, type "git stash pop". This will apply the stash and drop it simultaneously.
+5) Open the file and check whether the changes are there before applying the stash. If it is there, commit the changes by -am.
+6) Check 'gut status" and make sure the tree is clean.
+
+Reset and Reflog (Roll back):
+
+Types of reset. 1) Soft 2) Mixed 3) Hard.
+
+1) Open any file and make some changes. Push it to staging area by "git add .".
+2) Now open the same file and make some additional changes (e.g., additional changes in working directory) and don't commit. 
+3) Give "git status". You can see the changes both in staging area and in our working directory.
+4) There may be times where should go to the previous commit and feel like the current changes needn't to be committed.
+5) type "git hist" where you can see all commits.
+6) If you want to go to a different commit, tyoe "git reset $commitid --soft. Now the head will point to the changed commit id.
+7) Hard reset is the most destructive reset. 
+8) If you want to roll back all the changes, then please enter "git reflog" where you can see all the commit id with logs.
+9) Choose the one to which you want to roll back and type "git reset $commitid --hard". Now the changes in staging area and working directory will be wiped out and rolled back to
+the one which you have chosen.
+
+Github:
+1) Create your profile, repo etc.. To avoid confusion, create remote repo with same name as local repo.
+2) Linking your local repo with remote repo:
+
+Commands:
+--> git remote -v ( Manages all the connections with local and repo). If it returns nothing, then there is no remote connection set yet.
+--> git remote add origin "repo url" (Adding the remote repository. Origin is the reference name given to first repo).
+Now check whether the remote repository has been added. Give "git remote -v". It will show the remote repo with both fetch and push functionalities.
+
+Pusing the changes to Github:
+1) First, we need to synchronize our changes between local repo and remote repo and push the changes to remote repo.
+
+Commands:
+
+--> git push -u origin master --tags
+
+u - establish tracking branch relationship between master branch on local repo and master branch on remote repo.
+
+origin-> Name of the remote repo which we are going to push. 
+master-> name of the branch which you are going to push up.
+tags--> To send all the tags in current local repo to remote repo.
+Push the changes. When we do pushes in future, -u will no linger be required.
+
+SSH Authentication:
+1) Setup a SSH key and associate with github.
+2) Copy the public key and paste it in github.
+2) Validate the changes.
+
+Commands:
+--> Open your project folder and create a directory "mkdir .ssh" and open the directory using "cd .ssa"
+---> ssh-keygen -t rsa -C "k.raghuram1995@live.com" (To generate private and public keys).
+--> When prompted for which directory you to save the keys, press enter which means default.
+--> Create a passphrase(password) and confirm it again. Press enter.
+--> id_rsa(Private key) and idrsa_pub (Public Key) will be generated inside SSH directory which will be normally inside C Drive/User folder.
+--> Open the public key with any text editor and copy it. Paste it in github ans save it. (Whole key- Don't ignore anything).
+--> To validate, type ssh -T git@github.com and press enter. You will be prompted for passphrase. Enter it.
+--> Finally, you can see "Hi kraghu1995! You've successfully authenticated, but GitHub does not provide shell access". 
+
+Creating a remote repository and cloning into local:
+1) Create a remote repo with README, license and .gitignore files.
+2) Now open git bash and go to the projects folder.
+3) Type "git clone "ssh url". It may ask for the passphrase. On providing the passphrase, remote repo will be cloned into local directory.
+4) When the remote repo is cloned, it will create a folder with same name which is available in github. This is default. Suppose if you want to clone it in different folder name,
+then type git clone "ssh url" $user-defined-folder-name.
+
+Copying local files into repo:
+
+1) Open the local repository folder.
+2) To copy the contents from local directory to repo, give "cp -R ~/Downloads/initializr/* ."
+
+cp -> copy command
+-R -> Recursive
+~ -> User's home directory
+/Downloads/initializr/*- Source Path. (* is for copying all files of initializr folder).
+. (#DOT) -> Represents current directory.
+
+3) Now check the status. All new Files will be untracked.
+4) To track these files, give "git add ."
+5) Give "git status". Now the files will be in staging area.
+6) Commit the changes.
+7) Push into github "git push origin master".
+
+Fetch and Pull:
+
+1) Open any files in Github, make some changes and commit. Now the local repo is completely unaware of what was happened.
+2) Now go to local repo and update any file, commit and try to push now.
+3) There will be a conflict when you try to push since we haven't merged the remote repo changes with local repo.
+4) Pull is the combination of both fetch and merge.
+5) Give "Git fetch" to fetch the changes from remote repo. Check the "git status" where you will get "Your branch and 'origin/master' have diverged,
+and have 1 (#based on no.of.commits) and 1 different commits (#based on no.of.commits) each, respectively.
+6) Give "git pull" to merge the changes. You will be prompted for the merge message (Already available by default) in notepad (if you have added in git). Save the changes
+and close it.
+7) Now push the changes "git push" where you can see changes in local repo as well as remote repo in github.
+
+
+
+
+
+
+
+
+
+
