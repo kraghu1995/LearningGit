@@ -15,4 +15,4 @@ Updating README on master on Github before Rebase
 
 #Purpose
 
-Changes made in local for dealing with conflict while pulling
+Dealing with a conflict while pulling
