@@ -18,3 +18,7 @@ Updating README on master on Github before Rebase
 Dealing with a conflict while pulling
 
 This is for Floating tag (Pushing tags to another commit id) purpose
+
+#Getting Started
+
+To get started with the section, just clone this repo.
